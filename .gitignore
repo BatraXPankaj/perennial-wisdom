@@ -1,0 +1,23 @@
+# Binary
+perennial-wisdom
+hello-gin
+
+# SQLite database files
+wisdom.db
+wisdom.db-wal
+wisdom.db-shm
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+*.exe
+*.test
+*.out

@@ -1,0 +1,17 @@
+{{define "random-quote"}}
+<blockquote class="text-center max-w-3xl mx-auto">
+    <p class="font-serif text-3xl text-stone-100 italic leading-relaxed mb-4">"{{.Text}}"</p>
+    <footer class="text-stone-400">
+        — <a href="/pages/philosophers/{{.PhilosopherID}}" class="text-amber-200 hover:text-amber-100 transition" hx-boost="true">{{.PhilosopherName}}</a>,
+        <span class="text-stone-500">{{.Source}}</span>
+        <span class="mx-2 text-stone-600">·</span>
+        <a href="/pages/philosophies/{{.PhilosophyID}}" class="text-stone-400 hover:text-amber-200 transition" hx-boost="true">{{.PhilosophyName}}</a>
+    </footer>
+</blockquote>
+<div class="text-center mt-6">
+    <button hx-get="/partials/random-quote" hx-target="closest blockquote" hx-swap="outerHTML"
+        class="text-sm text-stone-500 hover:text-amber-200 transition cursor-pointer">
+        ↻ another
+    </button>
+</div>
+{{end}}

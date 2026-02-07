@@ -1,0 +1,24 @@
+{{define "content"}}
+<h1 class="font-serif text-3xl text-amber-200 mb-2">Scientific Evidence</h1>
+<p class="text-stone-500 mb-8">Neuroscience and neuropsychology findings that validate ancient contemplative insights.</p>
+
+<div class="flex gap-3 mb-8">
+    <a href="/pages/evidence" class="px-3 py-1.5 text-sm rounded border {{if not .Filter}}border-amber-700 text-amber-200{{else}}border-stone-700 text-stone-400 hover:text-amber-200{{end}} transition" hx-boost="true">All</a>
+    <a href="/pages/evidence?field=neuroscience" class="px-3 py-1.5 text-sm rounded border {{if eq .Filter "neuroscience"}}border-amber-700 text-amber-200{{else}}border-stone-700 text-stone-400 hover:text-amber-200{{end}} transition" hx-boost="true">Neuroscience</a>
+    <a href="/pages/evidence?field=neuropsychology" class="px-3 py-1.5 text-sm rounded border {{if eq .Filter "neuropsychology"}}border-amber-700 text-amber-200{{else}}border-stone-700 text-stone-400 hover:text-amber-200{{end}} transition" hx-boost="true">Neuropsychology</a>
+    <a href="/pages/evidence?field=psychology" class="px-3 py-1.5 text-sm rounded border {{if eq .Filter "psychology"}}border-amber-700 text-amber-200{{else}}border-stone-700 text-stone-400 hover:text-amber-200{{end}} transition" hx-boost="true">Psychology</a>
+</div>
+
+<div class="space-y-6">
+    {{range .Evidence}}
+    <a href="/pages/evidence/{{.ID}}" class="group block p-6 border border-stone-800 rounded-lg hover:border-amber-700 transition" hx-boost="true">
+        <div class="flex items-start justify-between mb-2">
+            <h2 class="font-serif text-xl text-stone-100 group-hover:text-amber-200 transition">{{.Title}}</h2>
+            <span class="text-xs px-2 py-0.5 bg-stone-900 border border-stone-700 rounded text-stone-400 ml-3 shrink-0">{{.Field}}</span>
+        </div>
+        <p class="text-sm text-stone-400 line-clamp-3">{{.Finding}}</p>
+        <p class="text-xs text-stone-600 mt-2">{{.Source}}</p>
+    </a>
+    {{end}}
+</div>
+{{end}}

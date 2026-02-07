@@ -1,0 +1,62 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}} — Perennial Wisdom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Crimson Pro', serif; }
+        .htmx-indicator { display: none; }
+        .htmx-request .htmx-indicator { display: inline; }
+        .htmx-request.htmx-indicator { display: inline; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        stone: { 950: '#0f0e0d' },
+                        amber: { 50: '#fffbeb' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-stone-950 text-stone-300 min-h-screen">
+    <!-- Navigation -->
+    <nav class="border-b border-stone-800 bg-stone-950/90 backdrop-blur-sm sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="/" class="font-serif text-xl text-amber-200 hover:text-amber-100 transition">
+                Perennial Wisdom
+            </a>
+            <div class="flex gap-6 text-sm">
+                <a href="/pages/quotes" class="hover:text-amber-200 transition" hx-boost="true">Quotes</a>
+                <a href="/pages/philosophers" class="hover:text-amber-200 transition" hx-boost="true">Philosophers</a>
+                <a href="/pages/philosophies" class="hover:text-amber-200 transition" hx-boost="true">Schools</a>
+                <a href="/pages/themes" class="hover:text-amber-200 transition" hx-boost="true">Themes</a>
+                <a href="/pages/evidence" class="hover:text-amber-200 transition" hx-boost="true">Science</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="max-w-5xl mx-auto px-6 py-12">
+        {{template "content" .}}
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-stone-800 mt-20">
+        <div class="max-w-5xl mx-auto px-6 py-8 text-center text-stone-500 text-sm">
+            <p class="font-serif text-lg italic text-stone-400 mb-2">"The obstacle is the way."</p>
+            <p>Perennial Wisdom — where ancient insight meets modern evidence</p>
+        </div>
+    </footer>
+</body>
+</html>
+{{end}}

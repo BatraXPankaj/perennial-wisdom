@@ -1,0 +1,38 @@
+{{define "content"}}
+<div class="flex items-center justify-between mb-8">
+    <h1 class="font-serif text-3xl text-amber-200">Quotes</h1>
+    <div class="flex gap-3">
+        <select hx-get="/pages/quotes" hx-target="#quotes-list" hx-select="#quotes-list" hx-swap="outerHTML"
+            name="philosophy" class="bg-stone-900 border border-stone-700 rounded px-3 py-1.5 text-sm text-stone-300 focus:border-amber-600 outline-none">
+            <option value="">All Schools</option>
+            {{range .Philosophies}}
+            <option value="{{.ID}}" {{if eq $.Filter.Philosophy .ID}}selected{{end}}>{{.Name}}</option>
+            {{end}}
+        </select>
+        <select hx-get="/pages/quotes" hx-target="#quotes-list" hx-select="#quotes-list" hx-swap="outerHTML"
+            name="theme" class="bg-stone-900 border border-stone-700 rounded px-3 py-1.5 text-sm text-stone-300 focus:border-amber-600 outline-none">
+            <option value="">All Themes</option>
+            {{range .Themes}}
+            <option value="{{.ID}}" {{if eq $.Filter.Theme .ID}}selected{{end}}>{{.Name}}</option>
+            {{end}}
+        </select>
+    </div>
+</div>
+
+<div id="quotes-list" class="space-y-8">
+    {{range .Quotes}}
+    <div class="p-6 border border-stone-800 rounded-lg hover:border-stone-700 transition">
+        <p class="font-serif text-xl text-stone-100 italic leading-relaxed mb-3">"{{.Text}}"</p>
+        <div class="text-sm text-stone-400">
+            — <a href="/pages/philosophers/{{.PhilosopherID}}" class="text-amber-200 hover:text-amber-100 transition" hx-boost="true">{{.PhilosopherName}}</a>
+            <span class="mx-1 text-stone-600">·</span>
+            <a href="/pages/philosophies/{{.PhilosophyID}}" class="text-stone-400 hover:text-amber-200 transition" hx-boost="true">{{.PhilosophyName}}</a>
+            <span class="mx-1 text-stone-600">·</span>
+            <span class="text-stone-500">{{.Source}}</span>
+        </div>
+    </div>
+    {{else}}
+    <p class="text-stone-500 text-center py-8">No quotes match your filters.</p>
+    {{end}}
+</div>
+{{end}}
