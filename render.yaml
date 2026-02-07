@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: perennial-wisdom
+    runtime: docker
+    plan: free
+    envVars:
+      - key: GIN_MODE
+        value: release
+      - key: PORT
+        value: "10000"
+      - key: DB_PATH
+        value: /tmp/wisdom.db

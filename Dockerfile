@@ -20,7 +20,7 @@ COPY --from=builder /app/templates ./templates
 RUN mkdir -p /data
 
 ENV DB_PATH=/data/wisdom.db
-ENV PORT=8080
-EXPOSE 8080
+ENV PORT=10000
+EXPOSE 10000
 
 CMD ["./perennial-wisdom"]
