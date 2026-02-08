@@ -6,7 +6,7 @@
     {{range .Themes}}
     <a href="/pages/themes/{{.ID}}" class="group block p-6 border border-stone-800 rounded-lg hover:border-amber-700 transition" hx-boost="true">
         <h2 class="font-serif text-xl text-stone-100 group-hover:text-amber-200 transition mb-2">{{.Name}}</h2>
-        <p class="text-sm text-stone-400 line-clamp-2">{{.Description}}</p>
+        <p class="text-sm text-stone-400 line-clamp-2">{{.Description.String}}</p>
     </a>
     {{end}}
 </div>

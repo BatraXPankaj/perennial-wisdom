@@ -1,12 +1,12 @@
 {{define "content-philosopher-detail"}}
 <div class="mb-8">
-    <a href="/pages/philosophies/{{.Philosopher.PhilosophyID}}" class="text-sm text-stone-500 hover:text-amber-200 transition" hx-boost="true">← {{.Philosopher.PhilosophyName}}</a>
+    <a href="/pages/philosophies/{{.Philosopher.TraditionID.String}}" class="text-sm text-stone-500 hover:text-amber-200 transition" hx-boost="true">← {{.Philosopher.TraditionName.String}}</a>
 </div>
 
 <div class="mb-12">
     <h1 class="font-serif text-4xl text-amber-200 mb-1">{{.Philosopher.Name}}</h1>
-    <p class="text-stone-500 text-sm mb-6">{{.Philosopher.Era}} · {{.Philosopher.PhilosophyName}}</p>
-    <p class="text-stone-300 leading-relaxed text-lg">{{.Philosopher.Bio}}</p>
+    <p class="text-stone-500 text-sm mb-6">{{.Philosopher.Era.String}} · {{.Philosopher.TraditionName.String}}</p>
+    <p class="text-stone-300 leading-relaxed text-lg">{{.Philosopher.Bio.String}}</p>
 </div>
 
 <!-- Key Teachings -->
@@ -26,7 +26,12 @@
         {{range .Quotes}}
         <div class="p-5 border-l-2 border-amber-800 pl-6">
             <p class="font-serif text-xl text-stone-100 italic leading-relaxed mb-2">"{{.Text}}"</p>
-            <p class="text-sm text-stone-500">{{.Source}}</p>
+            {{if .SourceWork.Valid}}
+            <p class="text-sm text-stone-500">{{.SourceWork.String}}</p>
+            {{end}}
+            {{if .ExpositionBrief.Valid}}
+            <p class="mt-2 text-sm text-stone-400">{{.ExpositionBrief.String}}</p>
+            {{end}}
         </div>
         {{end}}
         {{if not .Quotes}}

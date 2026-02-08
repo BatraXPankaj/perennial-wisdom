@@ -3,27 +3,56 @@ package db
 import (
 	"database/sql"
 	"log"
+	"os"
 
 	"github.com/jmoiron/sqlx"
-	_ "modernc.org/sqlite"
+	_ "github.com/lib/pq"
 )
 
-// Open opens (or creates) a SQLite database at the given path.
-// Uses WAL mode for better concurrent read performance.
+// Open connects to PostgreSQL using DATABASE_URL or constructs from components.
 // Returns a sqlx.DB which wraps database/sql with named-query support.
 func Open(dbPath string) *sqlx.DB {
-	conn, err := sql.Open("sqlite", dbPath)
-	if err != nil {
-		log.Fatalf("failed to open database at %s: %v", dbPath, err)
+	// Check for PostgreSQL connection string
+	connStr := os.Getenv("DATABASE_URL")
+	if connStr == "" {
+		// Construct from components or use default
+		host := os.Getenv("DB_HOST")
+		if host == "" {
+			host = "localhost"
+		}
+		port := os.Getenv("DB_PORT")
+		if port == "" {
+			port = "5432"
+		}
+		user := os.Getenv("DB_USER")
+		if user == "" {
+			user = "wisdom"
+		}
+		password := os.Getenv("DB_PASSWORD")
+		if password == "" {
+			password = "perennial2026"
+		}
+		dbname := os.Getenv("DB_NAME")
+		if dbname == "" {
+			dbname = "perennial_wisdom"
+		}
+		sslmode := os.Getenv("DB_SSLMODE")
+		if sslmode == "" {
+			sslmode = "disable"
+		}
+		connStr = "host=" + host + " port=" + port + " user=" + user +
+			" password=" + password + " dbname=" + dbname + " sslmode=" + sslmode
 	}
 
-	// WAL mode: concurrent readers, single writer, no locks on reads
-	conn.Exec("PRAGMA journal_mode=WAL")
-	conn.Exec("PRAGMA foreign_keys=ON")
+	conn, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatalf("failed to open database: %v", err)
+	}
 
 	if err := conn.Ping(); err != nil {
 		log.Fatalf("failed to ping database: %v", err)
 	}
 
-	return sqlx.NewDb(conn, "sqlite")
+	log.Println("Connected to PostgreSQL")
+	return sqlx.NewDb(conn, "postgres")
 }

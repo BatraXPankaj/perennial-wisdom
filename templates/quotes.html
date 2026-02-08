@@ -3,10 +3,10 @@
     <h1 class="font-serif text-3xl text-amber-200">Quotes</h1>
     <div class="flex gap-3">
         <select hx-get="/pages/quotes" hx-target="#quotes-list" hx-select="#quotes-list" hx-swap="outerHTML"
-            name="philosophy" class="bg-stone-900 border border-stone-700 rounded px-3 py-1.5 text-sm text-stone-300 focus:border-amber-600 outline-none">
+            name="tradition" class="bg-stone-900 border border-stone-700 rounded px-3 py-1.5 text-sm text-stone-300 focus:border-amber-600 outline-none">
             <option value="">All Schools</option>
-            {{range .Philosophies}}
-            <option value="{{.ID}}" {{if eq $.Filter.Philosophy .ID}}selected{{end}}>{{.Name}}</option>
+            {{range .Traditions}}
+            <option value="{{.ID}}" {{if eq $.Filter.Tradition .ID}}selected{{end}}>{{.Name}}</option>
             {{end}}
         </select>
         <select hx-get="/pages/quotes" hx-target="#quotes-list" hx-select="#quotes-list" hx-swap="outerHTML"
@@ -24,12 +24,17 @@
     <div class="p-6 border border-stone-800 rounded-lg hover:border-stone-700 transition">
         <p class="font-serif text-xl text-stone-100 italic leading-relaxed mb-3">"{{.Text}}"</p>
         <div class="text-sm text-stone-400">
-            — <a href="/pages/philosophers/{{.PhilosopherID}}" class="text-amber-200 hover:text-amber-100 transition" hx-boost="true">{{.PhilosopherName}}</a>
+            — <a href="/pages/philosophers/{{.PhilosopherID.String}}" class="text-amber-200 hover:text-amber-100 transition" hx-boost="true">{{.PhilosopherName.String}}</a>
             <span class="mx-1 text-stone-600">·</span>
-            <a href="/pages/philosophies/{{.PhilosophyID}}" class="text-stone-400 hover:text-amber-200 transition" hx-boost="true">{{.PhilosophyName}}</a>
+            <a href="/pages/philosophies/{{.TraditionID.String}}" class="text-stone-400 hover:text-amber-200 transition" hx-boost="true">{{.TraditionName.String}}</a>
+            {{if .SourceWork.Valid}}
             <span class="mx-1 text-stone-600">·</span>
-            <span class="text-stone-500">{{.Source}}</span>
+            <span class="text-stone-500">{{.SourceWork.String}}</span>
+            {{end}}
         </div>
+        {{if .ExpositionBrief.Valid}}
+        <p class="mt-3 text-sm text-stone-400">{{.ExpositionBrief.String}}</p>
+        {{end}}
     </div>
     {{else}}
     <p class="text-stone-500 text-center py-8">No quotes match your filters.</p>

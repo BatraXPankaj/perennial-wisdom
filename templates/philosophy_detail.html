@@ -4,8 +4,8 @@
 </div>
 
 <div class="mb-12">
-    <h1 class="font-serif text-4xl text-amber-200 mb-1">{{.Philosophy.Name}}</h1>
-    <p class="text-stone-500 text-sm mb-6">{{.Philosophy.Origin}}</p>
+    <h1 class="font-serif text-4xl text-amber-200 mb-1">{{.Tradition.Name}}</h1>
+    <p class="text-stone-500 text-sm mb-6">{{.Tradition.Origin.String}}</p>
 </div>
 
 <!-- Core Principles -->
@@ -21,18 +21,6 @@
     </ul>
 </div>
 
-<!-- Related Traditions -->
-{{if .Related}}
-<div class="mb-12">
-    <h2 class="font-serif text-2xl text-amber-200 mb-4">Related Traditions</h2>
-    <div class="flex flex-wrap gap-2">
-        {{range .Related}}
-        <span class="px-3 py-1.5 bg-stone-900 border border-stone-700 rounded-full text-sm text-stone-300">{{.}}</span>
-        {{end}}
-    </div>
-</div>
-{{end}}
-
 <!-- Philosophers -->
 <div class="mb-12">
     <h2 class="font-serif text-2xl text-amber-200 mb-4">Philosophers</h2>
@@ -40,7 +28,7 @@
         {{range .Philosophers}}
         <a href="/pages/philosophers/{{.ID}}" class="group p-4 border border-stone-800 rounded-lg hover:border-amber-700 transition" hx-boost="true">
             <h3 class="font-serif text-lg text-stone-100 group-hover:text-amber-200">{{.Name}}</h3>
-            <p class="text-xs text-stone-500">{{.Era}}</p>
+            <p class="text-xs text-stone-500">{{.Era.String}}</p>
         </a>
         {{end}}
     </div>
@@ -54,9 +42,12 @@
         <div class="p-5 border-l-2 border-amber-800 pl-6">
             <p class="font-serif text-xl text-stone-100 italic leading-relaxed mb-2">"{{.Text}}"</p>
             <p class="text-sm text-stone-500">
-                <a href="/pages/philosophers/{{.PhilosopherID}}" class="text-amber-200 hover:text-amber-100 transition" hx-boost="true">{{.PhilosopherName}}</a>
-                · {{.Source}}
+                <a href="/pages/philosophers/{{.PhilosopherID.String}}" class="text-amber-200 hover:text-amber-100 transition" hx-boost="true">{{.PhilosopherName.String}}</a>
+                {{if .SourceWork.Valid}}· {{.SourceWork.String}}{{end}}
             </p>
+            {{if .ExpositionBrief.Valid}}
+            <p class="mt-2 text-sm text-stone-400">{{.ExpositionBrief.String}}</p>
+            {{end}}
         </div>
         {{end}}
     </div>

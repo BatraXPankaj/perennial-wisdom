@@ -11,19 +11,9 @@ import (
 )
 
 func main() {
-	// Database path — configurable via env, defaults to local file
-	dbPath := os.Getenv("DB_PATH")
-	if dbPath == "" {
-		dbPath = "wisdom.db"
-	}
-
-	// Open SQLite (pure Go, embedded, no CGO)
-	database := db.Open(dbPath)
+	// Open PostgreSQL connection
+	database := db.Open("")
 	defer database.Close()
-
-	// Run migrations + seed data
-	db.Migrate(database)
-	db.Seed(database)
 
 	// Create query layer
 	queries := db.NewQueries(database)
@@ -32,7 +22,7 @@ func main() {
 	tmpl := template.Must(template.ParseGlob("templates/*.html"))
 	template.Must(tmpl.ParseGlob("templates/partials/*.html"))
 
-	// In-memory store still available for JSON API
+	// In-memory store still available for JSON API (legacy, can be removed later)
 	s := store.New()
 
 	// Wire all routes with explicit dependencies

@@ -3,10 +3,12 @@
     <blockquote class="text-center max-w-3xl mx-auto">
         <p class="font-serif text-3xl text-stone-100 italic leading-relaxed mb-4">"{{.Text}}"</p>
         <footer class="text-stone-400">
-            — <a href="/pages/philosophers/{{.PhilosopherID}}" class="text-amber-200 hover:text-amber-100 transition" hx-boost="true">{{.PhilosopherName}}</a>,
-            <span class="text-stone-500">{{.Source}}</span>
+            — <a href="/pages/philosophers/{{.PhilosopherID.String}}" class="text-amber-200 hover:text-amber-100 transition" hx-boost="true">{{.PhilosopherName.String}}</a>
+            {{if .SourceWork.Valid}}
+            <span class="text-stone-500">, {{.SourceWork.String}}</span>
+            {{end}}
             <span class="mx-2 text-stone-600">·</span>
-            <a href="/pages/philosophies/{{.PhilosophyID}}" class="text-stone-400 hover:text-amber-200 transition" hx-boost="true">{{.PhilosophyName}}</a>
+            <a href="/pages/philosophies/{{.TraditionID.String}}" class="text-stone-400 hover:text-amber-200 transition" hx-boost="true">{{.TraditionName.String}}</a>
         </footer>
     </blockquote>
     <div class="text-center mt-6">

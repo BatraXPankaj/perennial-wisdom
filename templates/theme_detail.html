@@ -5,20 +5,8 @@
 
 <div class="mb-12">
     <h1 class="font-serif text-4xl text-amber-200 mb-4">{{.Theme.Name}}</h1>
-    <p class="text-stone-300 leading-relaxed text-lg">{{.Theme.Description}}</p>
+    <p class="text-stone-300 leading-relaxed text-lg">{{.Theme.Description.String}}</p>
 </div>
-
-<!-- Traditions that address this theme -->
-{{if .Philosophies}}
-<div class="mb-12">
-    <h2 class="font-serif text-2xl text-amber-200 mb-4">Across Traditions</h2>
-    <div class="flex flex-wrap gap-2">
-        {{range .Philosophies}}
-        <span class="px-3 py-1.5 bg-stone-900 border border-stone-700 rounded-full text-sm text-stone-300">{{.}}</span>
-        {{end}}
-    </div>
-</div>
-{{end}}
 
 <!-- Quotes from different traditions on this theme -->
 <div class="mb-12">
@@ -28,30 +16,16 @@
         <div class="p-5 border-l-2 border-amber-800 pl-6">
             <p class="font-serif text-xl text-stone-100 italic leading-relaxed mb-2">"{{.Text}}"</p>
             <p class="text-sm text-stone-500">
-                <a href="/pages/philosophers/{{.PhilosopherID}}" class="text-amber-200 hover:text-amber-100 transition" hx-boost="true">{{.PhilosopherName}}</a>
-                · <a href="/pages/philosophies/{{.PhilosophyID}}" class="text-stone-400 hover:text-amber-200 transition" hx-boost="true">{{.PhilosophyName}}</a>
+                <a href="/pages/philosophers/{{.PhilosopherID.String}}" class="text-amber-200 hover:text-amber-100 transition" hx-boost="true">{{.PhilosopherName.String}}</a>
+                · <a href="/pages/philosophies/{{.TraditionID.String}}" class="text-stone-400 hover:text-amber-200 transition" hx-boost="true">{{.TraditionName.String}}</a>
             </p>
+            {{if .ExpositionBrief.Valid}}
+            <p class="mt-2 text-sm text-stone-400">{{.ExpositionBrief.String}}</p>
+            {{end}}
         </div>
+        {{else}}
+        <p class="text-stone-500">No quotes linked to this theme yet.</p>
         {{end}}
     </div>
 </div>
-
-<!-- Scientific Evidence -->
-{{if .Evidence}}
-<div>
-    <h2 class="font-serif text-2xl text-amber-200 mb-4">Scientific Evidence</h2>
-    <div class="space-y-6">
-        {{range .Evidence}}
-        <a href="/pages/evidence/{{.ID}}" class="group block p-6 border border-stone-800 rounded-lg hover:border-amber-700 transition" hx-boost="true">
-            <div class="flex items-start justify-between mb-2">
-                <h3 class="font-serif text-lg text-stone-100 group-hover:text-amber-200">{{.Title}}</h3>
-                <span class="text-xs px-2 py-0.5 bg-stone-900 border border-stone-700 rounded text-stone-400 ml-3 shrink-0">{{.Field}}</span>
-            </div>
-            <p class="text-sm text-stone-400 line-clamp-3">{{.Finding}}</p>
-            <p class="text-xs text-stone-600 mt-2">{{.Source}}</p>
-        </a>
-        {{end}}
-    </div>
-</div>
-{{end}}
 {{end}}

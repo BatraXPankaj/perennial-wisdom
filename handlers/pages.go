@@ -37,16 +37,16 @@ func (p *Pages) render(c *gin.Context, status int, data gin.H) {
 	buf.WriteTo(c.Writer)
 }
 
-// Home renders the landing page with a random quote and philosophy grid.
+// Home renders the landing page with a random quote and tradition grid.
 func (p *Pages) Home(c *gin.Context) {
-	philosophies, err := p.q.ListPhilosophies()
+	traditions, err := p.q.ListTraditions()
 	if err != nil {
-		log.Printf("Home: ListPhilosophies error: %v", err)
+		log.Printf("Home: ListTraditions error: %v", err)
 	}
 	p.render(c, http.StatusOK, gin.H{
-		"Page":         "home",
-		"Title":        "Home",
-		"Philosophies": philosophies,
+		"Page":       "home",
+		"Title":      "Home",
+		"Traditions": traditions,
 	})
 }
 
@@ -63,16 +63,16 @@ func (p *Pages) RandomQuotePartial(c *gin.Context) {
 
 // Quotes renders the quotes listing with filters.
 func (p *Pages) Quotes(c *gin.Context) {
-	philosophy := c.Query("philosophy")
+	tradition := c.Query("tradition")
 	theme := c.Query("theme")
 
-	quotes, err := p.q.ListQuotes("", philosophy, theme)
+	quotes, err := p.q.ListQuotes("", tradition, theme)
 	if err != nil {
 		log.Printf("Quotes: ListQuotes error: %v", err)
 	}
-	philosophies, err := p.q.ListPhilosophies()
+	traditions, err := p.q.ListTraditions()
 	if err != nil {
-		log.Printf("Quotes: ListPhilosophies error: %v", err)
+		log.Printf("Quotes: ListTraditions error: %v", err)
 	}
 	themes, err := p.q.ListThemes()
 	if err != nil {
@@ -80,14 +80,14 @@ func (p *Pages) Quotes(c *gin.Context) {
 	}
 
 	p.render(c, http.StatusOK, gin.H{
-		"Page":         "quotes",
-		"Title":        "Quotes",
-		"Quotes":       quotes,
-		"Philosophies": philosophies,
-		"Themes":       themes,
+		"Page":       "quotes",
+		"Title":      "Quotes",
+		"Quotes":     quotes,
+		"Traditions": traditions,
+		"Themes":     themes,
 		"Filter": gin.H{
-			"Philosophy": philosophy,
-			"Theme":      theme,
+			"Tradition": tradition,
+			"Theme":     theme,
 		},
 	})
 }
@@ -127,46 +127,41 @@ func (p *Pages) PhilosopherDetail(c *gin.Context) {
 	})
 }
 
-// Philosophies renders the philosophies listing.
+// Philosophies renders the traditions (schools) listing.
 func (p *Pages) Philosophies(c *gin.Context) {
-	philosophies, err := p.q.ListPhilosophies()
+	traditions, err := p.q.ListTraditions()
 	if err != nil {
-		log.Printf("Philosophies: ListPhilosophies error: %v", err)
+		log.Printf("Philosophies: ListTraditions error: %v", err)
 	}
 	p.render(c, http.StatusOK, gin.H{
-		"Page":         "philosophies",
-		"Title":        "Schools of Wisdom",
-		"Philosophies": philosophies,
+		"Page":       "philosophies",
+		"Title":      "Schools of Wisdom",
+		"Traditions": traditions,
 	})
 }
 
-// PhilosophyDetail renders a single philosophy page.
+// PhilosophyDetail renders a single tradition page.
 func (p *Pages) PhilosophyDetail(c *gin.Context) {
 	id := c.Param("id")
-	philosophy, err := p.q.GetPhilosophy(id)
+	tradition, err := p.q.GetTradition(id)
 	if err != nil {
-		c.String(http.StatusNotFound, "philosophy not found")
+		c.String(http.StatusNotFound, "tradition not found")
 		return
 	}
-	related, err := p.q.PhilosophyRelated(id)
+	philosophers, err := p.q.TraditionPhilosophers(id)
 	if err != nil {
-		log.Printf("PhilosophyDetail: PhilosophyRelated error: %v", err)
+		log.Printf("PhilosophyDetail: TraditionPhilosophers error: %v", err)
 	}
-	philosophers, err := p.q.PhilosophyPhilosophers(id)
+	quotes, err := p.q.TraditionQuotes(id)
 	if err != nil {
-		log.Printf("PhilosophyDetail: PhilosophyPhilosophers error: %v", err)
-	}
-	quotes, err := p.q.PhilosophyQuotes(id)
-	if err != nil {
-		log.Printf("PhilosophyDetail: PhilosophyQuotes error: %v", err)
+		log.Printf("PhilosophyDetail: TraditionQuotes error: %v", err)
 	}
 
 	p.render(c, http.StatusOK, gin.H{
 		"Page":         "philosophy-detail",
-		"Title":        philosophy.Name,
-		"Philosophy":   philosophy,
-		"Principles":   philosophy.Principles(),
-		"Related":      related,
+		"Title":        tradition.Name,
+		"Tradition":    tradition,
+		"Principles":   tradition.Principles(),
 		"Philosophers": philosophers,
 		"Quotes":       quotes,
 	})
@@ -193,26 +188,16 @@ func (p *Pages) ThemeDetail(c *gin.Context) {
 		c.String(http.StatusNotFound, "theme not found")
 		return
 	}
-	philosophies, err := p.q.ThemePhilosophies(id)
-	if err != nil {
-		log.Printf("ThemeDetail: ThemePhilosophies error: %v", err)
-	}
 	quotes, err := p.q.ThemeQuotes(id)
 	if err != nil {
 		log.Printf("ThemeDetail: ThemeQuotes error: %v", err)
 	}
-	evidence, err := p.q.ThemeEvidence(id)
-	if err != nil {
-		log.Printf("ThemeDetail: ThemeEvidence error: %v", err)
-	}
 
 	p.render(c, http.StatusOK, gin.H{
-		"Page":         "theme-detail",
-		"Title":        theme.Name,
-		"Theme":        theme,
-		"Philosophies": philosophies,
-		"Quotes":       quotes,
-		"Evidence":     evidence,
+		"Page":   "theme-detail",
+		"Title":  theme.Name,
+		"Theme":  theme,
+		"Quotes": quotes,
 	})
 }
 
@@ -239,20 +224,10 @@ func (p *Pages) EvidenceDetail(c *gin.Context) {
 		c.String(http.StatusNotFound, "evidence not found")
 		return
 	}
-	themes, err := p.q.EvidenceThemes(id)
-	if err != nil {
-		log.Printf("EvidenceDetail: EvidenceThemes error: %v", err)
-	}
-	quotes, err := p.q.EvidenceQuotes(id)
-	if err != nil {
-		log.Printf("EvidenceDetail: EvidenceQuotes error: %v", err)
-	}
 
 	p.render(c, http.StatusOK, gin.H{
 		"Page":     "evidence-detail",
 		"Title":    evidence.Title,
 		"Evidence": evidence,
-		"Themes":   themes,
-		"Quotes":   quotes,
 	})
 }
