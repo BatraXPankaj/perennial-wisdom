@@ -47,7 +47,17 @@
 
     <!-- Main content -->
     <main class="max-w-5xl mx-auto px-6 py-12">
-        {{template "content" .}}
+        {{if eq .Page "home"}}{{template "content-home" .}}
+        {{else if eq .Page "quotes"}}{{template "content-quotes" .}}
+        {{else if eq .Page "philosophers"}}{{template "content-philosophers" .}}
+        {{else if eq .Page "philosopher-detail"}}{{template "content-philosopher-detail" .}}
+        {{else if eq .Page "philosophies"}}{{template "content-philosophies" .}}
+        {{else if eq .Page "philosophy-detail"}}{{template "content-philosophy-detail" .}}
+        {{else if eq .Page "themes"}}{{template "content-themes" .}}
+        {{else if eq .Page "theme-detail"}}{{template "content-theme-detail" .}}
+        {{else if eq .Page "evidence"}}{{template "content-evidence" .}}
+        {{else if eq .Page "evidence-detail"}}{{template "content-evidence-detail" .}}
+        {{end}}
     </main>
 
     <!-- Footer -->

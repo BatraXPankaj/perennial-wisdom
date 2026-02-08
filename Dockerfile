@@ -16,11 +16,13 @@ WORKDIR /app
 COPY --from=builder /app/perennial-wisdom .
 COPY --from=builder /app/templates ./templates
 
-# Persistent volume for SQLite data
-RUN mkdir -p /data
+# Persistent storage directory
+# - Azure App Service: /home is persistent, set DB_PATH=/home/data/wisdom.db
+# - Fly.io / local: /data via mounted volume
+RUN mkdir -p /data /home/data
 
-ENV DB_PATH=/data/wisdom.db
-ENV PORT=10000
-EXPOSE 10000
+ENV DB_PATH=/home/data/wisdom.db
+ENV PORT=8080
+EXPOSE 8080
 
 CMD ["./perennial-wisdom"]

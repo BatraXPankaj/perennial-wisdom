@@ -1,5 +1,6 @@
 # Binary
 perennial-wisdom
+perennial-wisdom-linux
 hello-gin
 
 # SQLite database files
@@ -12,6 +13,10 @@ wisdom.db-shm
 .idea/
 *.swp
 *.swo
+
+# Azure / secrets
+.env
+.azure-token.json
 
 # OS
 .DS_Store
